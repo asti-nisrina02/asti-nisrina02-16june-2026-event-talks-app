@@ -65,12 +65,20 @@ document.addEventListener('DOMContentLoaded', () => {
         setLoadingState(true);
         hideError();
         
+        const startTime = Date.now();
+        
         try {
             const response = await fetch('/api/release-notes');
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
+            
+            // Introduce a subtle minimum loading latency (850ms) to allow the holographic scanner
+            // line to sweep across the grid cards smoothly, preventing flashing layout changes.
+            const elapsed = Date.now() - startTime;
+            const remaining = Math.max(0, 850 - elapsed);
+            await new Promise(resolve => setTimeout(resolve, remaining));
             
             if (data.success && Array.isArray(data.updates)) {
                 allUpdates = data.updates;
@@ -93,14 +101,56 @@ document.addEventListener('DOMContentLoaded', () => {
             refreshBtn.disabled = true;
             refreshBtn.classList.add('loading');
             refreshIcon.classList.add('spinning');
-            // Render Skeleton Loader Cards
+            // Render Holographic Scanning Skeleton Loader Cards
             notesContainer.innerHTML = `
-                <div class="skeleton-card bento-large" aria-hidden="true"></div>
-                <div class="skeleton-card bento-wide" aria-hidden="true"></div>
-                <div class="skeleton-card" aria-hidden="true"></div>
-                <div class="skeleton-card bento-tall" aria-hidden="true"></div>
-                <div class="skeleton-card" aria-hidden="true"></div>
-                <div class="skeleton-card" aria-hidden="true"></div>
+                <div class="skeleton-card bento-large" aria-hidden="true">
+                    <div class="scanner-line"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-header"></div>
+                        <div class="skeleton-line line-1"></div>
+                        <div class="skeleton-line line-2"></div>
+                        <div class="skeleton-line line-3"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card bento-wide" aria-hidden="true">
+                    <div class="scanner-line"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-header"></div>
+                        <div class="skeleton-line line-1"></div>
+                        <div class="skeleton-line line-2"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card" aria-hidden="true">
+                    <div class="scanner-line"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-header"></div>
+                        <div class="skeleton-line line-1"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card bento-tall" aria-hidden="true">
+                    <div class="scanner-line"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-header"></div>
+                        <div class="skeleton-line line-1"></div>
+                        <div class="skeleton-line line-2"></div>
+                        <div class="skeleton-line line-3"></div>
+                        <div class="skeleton-line line-4"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card" aria-hidden="true">
+                    <div class="scanner-line"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-header"></div>
+                        <div class="skeleton-line line-1"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card" aria-hidden="true">
+                    <div class="scanner-line"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-header"></div>
+                        <div class="skeleton-line line-1"></div>
+                    </div>
+                </div>
             `;
         } else {
             refreshBtn.disabled = false;

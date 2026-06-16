@@ -16,6 +16,8 @@ This application was developed as a hands-on project for the codelab:
 ## 🚀 Key Features
 
 * **Procedural Bento Grid Layout:** Release note items are dynamically sized (`large`, `wide`, `tall`, or standard `1x1`) based on their layout index and content length. It creates an asymmetrical dashboard layout that collapses into a single-column layout on smaller screens.
+* **Holographic Blueprint Bento Loader:** A custom-designed loading state featuring digital blueprint-grid backgrounds (`linear-gradient` mesh), a vertical scanning laser sweep line (`.scanner-line`) with glow bloom, and pulsing dashed borders. Features distinct themes: neon cyan/blue sweeps in dark theme, and neon violet/blue sweeps in light theme.
+* **Delightful Latency:** Enforces a minimum loading delay (850ms) during feeds sync, allowing the holographic scan line to complete a smooth sweep animation cycle instead of flashing awkwardly.
 * **Animated & Interactive Background:**
   * **Floating Orbs:** Three colored ambient orbs float and scale slowly in the background using CSS keyframe animations.
   * **Cursor Spotlight:** An interactive radial gradient spotlight that tracks and follows the user's cursor movements in real-time.
@@ -23,6 +25,8 @@ This application was developed as a hands-on project for the codelab:
 * **Synchronized Dual Filtering:** Toggle categories (Features, Issues, Changes, Deprecations) from either the sidebar checkboxes or the horizontal header chips. Active states and record count indicators automatically sync between both views.
 * **Custom 'Sync Feed' Button:** Features a rotating conic-gradient border. The rotation speeds up on hover and cycles through a multi-color loading spectrum when actively synchronizing data.
 * **X (Twitter) Draft Composer Modal:** A modal containing a draft tweet with a character count warning indicator. It triggers Twitter's Web Intent API to safely post updates without requiring OAuth API credentials.
+* **Copy to Clipboard & CSV Export:** Clean utilities for copying update details instantly to your clipboard or exporting the currently filtered list to a downloadable CSV file.
+* **Light/Dark Color Scheme Switcher:** Seamlessly swaps color profiles using root CSS custom variables. Features persistent preference saving via `localStorage`.
 
 ---
 
