@@ -50,6 +50,110 @@
 }
 
 /* ==========================================================================
+   Light Theme Variable Overrides
+   ========================================================================== */
+body.light-theme {
+    --bg-app: #f3f6fa;
+    --bg-sidebar: #ffffff;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f8fafc;
+    --bg-modal: rgba(255, 255, 255, 0.96);
+    
+    --border-color: rgba(15, 23, 42, 0.08);
+    --border-color-hover: rgba(37, 99, 235, 0.35);
+    
+    /* Text colors */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    
+    /* Modify Accent Categories Background opacity for light backgrounds */
+    --color-feature-bg: rgba(16, 185, 129, 0.08);
+    --color-issue-bg: rgba(244, 63, 94, 0.06);
+    --color-changed-bg: rgba(59, 130, 246, 0.06);
+    --color-deprecation-bg: rgba(168, 85, 247, 0.06);
+    --color-general-bg: rgba(100, 116, 139, 0.06);
+}
+
+/* Component Level Light Theme Overrides */
+body.light-theme {
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+}
+
+body.light-theme .logo h2 {
+    background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.light-theme .card {
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+body.light-theme .card:hover {
+    background: #ffffff;
+    border-color: var(--border-color-hover);
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+body.light-theme .orb {
+    mix-blend-mode: multiply;
+    opacity: 0.04;
+}
+
+body.light-theme::after {
+    background: radial-gradient(
+        circle 500px at var(--mouse-x, -500px) var(--mouse-y, -500px),
+        rgba(37, 99, 235, 0.04) 0%,
+        rgba(168, 85, 247, 0.02) 50%,
+        transparent 100%
+    );
+}
+
+body.light-theme .search-box {
+    background-color: rgba(15, 23, 42, 0.02);
+}
+
+body.light-theme .search-box:focus-within {
+    background-color: #ffffff;
+}
+
+body.light-theme .filter-checkbox:hover {
+    background-color: rgba(15, 23, 42, 0.02);
+}
+
+body.light-theme .checkbox-custom {
+    background-color: rgba(15, 23, 42, 0.04);
+}
+
+body.light-theme .stats-card {
+    background-color: rgba(15, 23, 42, 0.01);
+}
+
+body.light-theme .bento-btn-content {
+    background-color: #0f172a; /* Keep dark for neon-glow contrast */
+}
+
+body.light-theme .modal-content {
+    background-color: var(--bg-modal);
+    border-color: rgba(15, 23, 42, 0.1);
+}
+
+body.light-theme #tweet-textarea {
+    color: var(--text-primary);
+}
+
+body.light-theme .tweet-preview-container {
+    background-color: rgba(15, 23, 42, 0.02);
+}
+
+body.light-theme .tweet-attachment-card {
+    background-color: rgba(15, 23, 42, 0.01);
+}
+
+/* ==========================================================================
    Global & Reset Styles
    ========================================================================== */
 * {

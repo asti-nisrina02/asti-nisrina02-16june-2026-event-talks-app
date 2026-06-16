@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.querySelector('.app-container');
     const sidebarToggle = document.getElementById('sidebar-toggle');
     const sidebarToggleIcon = document.getElementById('sidebar-toggle-icon');
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
     const exportCsvBtn = document.getElementById('export-csv-btn');
     const refreshBtn = document.getElementById('refresh-btn');
     const refreshIcon = document.getElementById('refresh-icon');
@@ -460,6 +462,13 @@ document.addEventListener('DOMContentLoaded', () => {
         exportToCSV(currentlyFilteredUpdates);
     });
 
+    // Theme Toggle click
+    themeToggle.addEventListener('click', () => {
+        const isLight = document.body.classList.toggle('light-theme');
+        themeIcon.textContent = isLight ? '🌙' : '☀️';
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+
     // Mouse movement listener for interactive background spotlight glow
     document.addEventListener('mousemove', (e) => {
         document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
@@ -469,5 +478,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     // Initialization Run
     // ==========================================================================
+    // Load saved color theme
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+        themeIcon.textContent = '🌙';
+    } else {
+        document.body.classList.remove('light-theme');
+        themeIcon.textContent = '☀️';
+    }
+
     loadReleaseNotes();
 });
