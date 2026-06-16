@@ -100,14 +100,26 @@ body.light-theme .card:hover {
 
 body.light-theme .orb {
     mix-blend-mode: multiply;
-    opacity: 0.04;
+    opacity: 0.55; /* Higher baseline opacity for delicate pastel gradients */
+}
+
+body.light-theme .orb-1 {
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, transparent 80%);
+}
+
+body.light-theme .orb-2 {
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.14) 0%, transparent 80%);
+}
+
+body.light-theme .orb-3 {
+    background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, transparent 80%);
 }
 
 body.light-theme::after {
     background: radial-gradient(
         circle 500px at var(--mouse-x, -500px) var(--mouse-y, -500px),
-        rgba(37, 99, 235, 0.04) 0%,
-        rgba(168, 85, 247, 0.02) 50%,
+        rgba(255, 255, 255, 0.5) 0%,   /* Soft illuminating white core */
+        rgba(59, 130, 246, 0.04) 60%,   /* Faint sky-blue halo */
         transparent 100%
     );
 }
