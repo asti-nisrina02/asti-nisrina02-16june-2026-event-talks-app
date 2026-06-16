@@ -99,20 +99,20 @@ body.light-theme .card:hover {
 }
 
 body.light-theme .orb {
-    mix-blend-mode: multiply;
-    opacity: 0.55; /* Higher baseline opacity for delicate pastel gradients */
+    mix-blend-mode: normal; /* Use normal mode to let colors blend purely on top of grey background */
+    opacity: 0.85;          /* Increase baseline visibility */
 }
 
 body.light-theme .orb-1 {
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, transparent 80%);
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.26) 0%, transparent 80%); /* Soft blue */
 }
 
 body.light-theme .orb-2 {
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.14) 0%, transparent 80%);
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.22) 0%, transparent 80%); /* Soft purple */
 }
 
 body.light-theme .orb-3 {
-    background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, transparent 80%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.55) 0%, transparent 80%); /* Soft white glow */
 }
 
 body.light-theme::after {
