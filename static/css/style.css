@@ -53,11 +53,11 @@
    Light Theme Variable Overrides
    ========================================================================== */
 body.light-theme {
-    --bg-app: #f3f6fa;
-    --bg-sidebar: #ffffff;
-    --bg-card: #ffffff;
-    --bg-card-hover: #f8fafc;
-    --bg-modal: rgba(255, 255, 255, 0.96);
+    --bg-app: #e2e8f0;       /* Soft light slate-grey background */
+    --bg-sidebar: #f1f5f9;   /* Off-white sidebar */
+    --bg-card: #f8fafc;      /* Very soft off-white cards (not pure white) */
+    --bg-card-hover: #edf2f7; /* Hover background slate-grey highlight */
+    --bg-modal: rgba(241, 245, 249, 0.98);
     
     --border-color: rgba(15, 23, 42, 0.08);
     --border-color-hover: rgba(37, 99, 235, 0.35);
@@ -88,12 +88,12 @@ body.light-theme .logo h2 {
 }
 
 body.light-theme .card {
-    background: #ffffff;
+    background: var(--bg-card);
     box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 }
 
 body.light-theme .card:hover {
-    background: #ffffff;
+    background: var(--bg-card-hover);
     border-color: var(--border-color-hover);
     box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
 }
