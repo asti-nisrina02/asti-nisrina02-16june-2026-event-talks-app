@@ -5,6 +5,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // State Store
     let allUpdates = [];
+    let currentlyFilteredUpdates = [];
     let activeFilters = {
         search: '',
         categories: ['Feature', 'Issue', 'Changed', 'Deprecation', 'General']
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.querySelector('.app-container');
     const sidebarToggle = document.getElementById('sidebar-toggle');
     const sidebarToggleIcon = document.getElementById('sidebar-toggle-icon');
+    const exportCsvBtn = document.getElementById('export-csv-btn');
     const refreshBtn = document.getElementById('refresh-btn');
     const refreshIcon = document.getElementById('refresh-icon');
     const notesContainer = document.getElementById('notes-container');
@@ -162,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return matchesSearch;
         });
 
+        currentlyFilteredUpdates = filtered;
         statShowing.textContent = filtered.length;
         renderUpdates(filtered);
     }
@@ -203,6 +206,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${update.body_html}
                 </div>
                 <div class="card-actions">
+                    <button class="btn btn-copy" data-id="${update.id}" aria-label="Copy update text to clipboard">
+                        📋 Copy
+                    </button>
                     <button class="btn btn-share" data-id="${update.id}" aria-label="Tweet about this update">
                         Share on X
                     </button>
@@ -213,6 +219,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const shareBtn = card.querySelector('.btn-share');
             shareBtn.addEventListener('click', () => {
                 openTweetModal(update);
+            });
+
+            // Hook up the copy button event
+            const copyBtn = card.querySelector('.btn-copy');
+            copyBtn.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(update.body_text);
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '✓ Copied!';
+                    copyBtn.classList.add('copied');
+                    copyBtn.disabled = true;
+                    
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalText;
+                        copyBtn.classList.remove('copied');
+                        copyBtn.disabled = false;
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                    showError('Failed to copy text to clipboard.');
+                }
             });
 
             notesContainer.appendChild(card);
@@ -388,6 +415,50 @@ document.addEventListener('DOMContentLoaded', () => {
     function hideError() {
         errorBanner.classList.add('hidden');
     }
+
+    function exportToCSV(data) {
+        const headers = ['Date', 'Category', 'Link', 'Description'];
+        
+        const escapeCSV = (val) => {
+            if (val === undefined || val === null) return '';
+            let escaped = val.toString().replace(/"/g, '""');
+            if (escaped.includes(',') || escaped.includes('\n') || escaped.includes('"')) {
+                escaped = `"${escaped}"`;
+            }
+            return escaped;
+        };
+        
+        const csvRows = [
+            headers.join(','),
+            ...data.map(item => [
+                escapeCSV(item.date),
+                escapeCSV(item.type),
+                escapeCSV(item.link),
+                escapeCSV(item.body_text)
+            ].join(','))
+        ];
+        
+        const csvContent = csvRows.join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `bigquery_release_notes_${new Date().toISOString().slice(0, 10)}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Export to CSV click
+    exportCsvBtn.addEventListener('click', () => {
+        if (currentlyFilteredUpdates.length === 0) {
+            showError('No updates available to export.');
+            return;
+        }
+        exportToCSV(currentlyFilteredUpdates);
+    });
 
     // Mouse movement listener for interactive background spotlight glow
     document.addEventListener('mousemove', (e) => {
