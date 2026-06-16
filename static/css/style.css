@@ -153,6 +153,51 @@ body.light-theme .tweet-attachment-card {
     background-color: rgba(15, 23, 42, 0.01);
 }
 
+body.light-theme .text-gradient {
+    background: linear-gradient(135deg, #0f172a 0%, #334155 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+body.light-theme .card-body code {
+    background-color: rgba(15, 23, 42, 0.05);
+    color: #0f172a;
+}
+
+/* ==========================================================================
+   Theme Toggle Button Custom Styling (Anti-Mainstream High-Visibility)
+   ========================================================================== */
+#theme-toggle {
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #fbbc05; /* Bright yellow sun in dark mode */
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: var(--transition-base);
+    cursor: pointer;
+}
+
+#theme-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: #fbbc05;
+    box-shadow: 0 0 10px rgba(251, 188, 5, 0.3);
+    transform: translateY(-1px);
+}
+
+body.light-theme #theme-toggle {
+    background-color: rgba(15, 23, 42, 0.04);
+    border-color: rgba(15, 23, 42, 0.08);
+    color: #1e293b; /* Dark slate moon in light mode */
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+}
+
+body.light-theme #theme-toggle:hover {
+    background-color: rgba(15, 23, 42, 0.08);
+    border-color: #0f172a;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+    transform: translateY(-1px);
+}
+
 /* ==========================================================================
    Global & Reset Styles
    ========================================================================== */
