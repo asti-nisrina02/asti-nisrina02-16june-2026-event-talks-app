@@ -6,6 +6,13 @@ Designed with a high-fidelity **Bento Grid** aesthetic, a cursor-tracking spotli
 
 ---
 
+## 📖 About this Project
+
+This application was developed as a hands-on project for the codelab:
+**"Hands-on with Antigravity CLI for 5-day AI Agents: Intensive Vibe Coding Course"** (a Google X Kaggle Course). It demonstrates rapid prototyping, responsive layouts, API integration, and interactive UX designs using the Antigravity AI coding assistant agent.
+
+---
+
 ## 🚀 Key Features
 
 * **Procedural Bento Grid Layout:** Release note items are dynamically sized (`large`, `wide`, `tall`, or standard `1x1`) based on their layout index and content length. It creates an asymmetrical dashboard layout that collapses into a single-column layout on smaller screens.
