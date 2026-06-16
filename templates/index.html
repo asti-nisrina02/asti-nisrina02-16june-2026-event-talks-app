@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BigQuery Release Notes Hub</title>
+    <meta name="description" content="Explore, filter, and share the latest Google Cloud BigQuery release notes and updates. Share highlights directly to Twitter/X.">
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="dark-theme">
+    <!-- Animated background glowing orbs -->
+    <div class="bg-orbs" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation & Filters -->
+        <aside class="sidebar" id="filter-sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <h2>BQ Hub</h2>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Search Updates</h3>
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-input" placeholder="Search keywords..." aria-label="Search release notes">
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Filter by Category</h3>
+                <div class="filter-group" id="category-filters">
+                    <label class="filter-checkbox" for="filter-feature">
+                        <input type="checkbox" id="filter-feature" value="Feature" checked>
+                        <span class="checkbox-custom"></span>
+                        <span class="filter-label">Feature</span>
+                        <span class="badge badge-feature" id="count-feature">0</span>
+                    </label>
+                    <label class="filter-checkbox" for="filter-issue">
+                        <input type="checkbox" id="filter-issue" value="Issue" checked>
+                        <span class="checkbox-custom"></span>
+                        <span class="filter-label">Issue</span>
+                        <span class="badge badge-issue" id="count-issue">0</span>
+                    </label>
+                    <label class="filter-checkbox" for="filter-changed">
+                        <input type="checkbox" id="filter-changed" value="Changed" checked>
+                        <span class="checkbox-custom"></span>
+                        <span class="filter-label">Changed</span>
+                        <span class="badge badge-changed" id="count-changed">0</span>
+                    </label>
+                    <label class="filter-checkbox" for="filter-deprecation">
+                        <input type="checkbox" id="filter-deprecation" value="Deprecation" checked>
+                        <span class="checkbox-custom"></span>
+                        <span class="filter-label">Deprecation</span>
+                        <span class="badge badge-deprecation" id="count-deprecation">0</span>
+                    </label>
+                    <label class="filter-checkbox" for="filter-general">
+                        <input type="checkbox" id="filter-general" value="General" checked>
+                        <span class="checkbox-custom"></span>
+                        <span class="filter-label">General</span>
+                        <span class="badge badge-general" id="count-general">0</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Statistics</h3>
+                <div class="stats-card">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Items</span>
+                        <span class="stat-val" id="stat-total">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Showing</span>
+                        <span class="stat-val text-gradient" id="stat-showing">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <p>Google Cloud BigQuery Feed</p>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="app-header">
+                <div class="header-left">
+                    <button id="sidebar-toggle" class="btn btn-secondary btn-icon-only" aria-label="Toggle Sidebar" id="sidebar-toggle-btn">
+                        <span id="sidebar-toggle-icon">◀</span>
+                    </button>
+                    <div class="header-title-area">
+                        <span class="category-meta">Release Notes Feed</span>
+                        <h1 class="text-gradient">BigQuery Updates</h1>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <button id="refresh-btn" class="bento-btn" aria-label="Sync release notes">
+                        <span class="bento-btn-glow"></span>
+                        <span class="bento-btn-content">
+                            <span class="bento-btn-icon" id="refresh-icon">⚡</span>
+                            <span class="bento-btn-text">Sync Feed</span>
+                        </span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Horizontal Filter Chips under main header -->
+            <div class="filter-chips-wrapper" id="filter-chips-wrapper">
+                <span class="filter-chips-label">Quick Filters:</span>
+                <div class="filter-chips" id="main-filter-chips">
+                    <button class="chip active chip-feature" data-value="Feature" id="chip-feature" aria-label="Filter Features">
+                        Feature <span class="chip-count" id="chip-count-feature">0</span>
+                    </button>
+                    <button class="chip active chip-issue" data-value="Issue" id="chip-issue" aria-label="Filter Issues">
+                        Issue <span class="chip-count" id="chip-count-issue">0</span>
+                    </button>
+                    <button class="chip active chip-changed" data-value="Changed" id="chip-changed" aria-label="Filter Changes">
+                        Changed <span class="chip-count" id="chip-count-changed">0</span>
+                    </button>
+                    <button class="chip active chip-deprecation" data-value="Deprecation" id="chip-deprecation" aria-label="Filter Deprecations">
+                        Deprecation <span class="chip-count" id="chip-count-deprecation">0</span>
+                    </button>
+                    <button class="chip active chip-general" data-value="General" id="chip-general" aria-label="Filter General Updates">
+                        General <span class="chip-count" id="chip-count-general">0</span>
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- Error Banner -->
+            <div id="error-banner" class="error-banner hidden">
+                <span class="error-icon">⚠️</span>
+                <span class="error-message" id="error-message-text">Error loading feed.</span>
+                <button id="error-close" class="btn-close">&times;</button>
+            </div>
+
+            <!-- Release Notes List Container -->
+            <section class="notes-feed" id="notes-container" aria-live="polite">
+                <!-- Skeleton loader cards will be inserted here dynamically -->
+                <div class="skeleton-card bento-large"></div>
+                <div class="skeleton-card bento-wide"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card bento-tall"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Twitter/X Share Modal Overlay -->
+    <div class="modal-overlay hidden" id="tweet-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Draft Tweet</h2>
+                <button id="modal-close" class="btn-close" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tweet-preview-container">
+                    <div class="tweet-user-meta">
+                        <div class="tweet-avatar">🤖</div>
+                        <div class="tweet-user-info">
+                            <span class="tweet-display-name">BigQuery Broadcaster</span>
+                            <span class="tweet-handle">@bq_release</span>
+                        </div>
+                    </div>
+                    <textarea id="tweet-textarea" rows="5" placeholder="Customize your tweet..." aria-label="Tweet text"></textarea>
+                    
+                    <div class="tweet-attachment-card" id="tweet-attachment">
+                        <div class="tweet-attachment-type" id="tweet-attach-type">Feature</div>
+                        <div class="tweet-attachment-date" id="tweet-attach-date">June 15, 2026</div>
+                        <p class="tweet-attachment-text" id="tweet-attach-text">Loading snippet...</p>
+                    </div>
+                </div>
+
+                <div class="tweet-footer">
+                    <div class="character-counter" id="char-counter">0 / 280</div>
+                    <button id="submit-tweet-btn" class="btn btn-tweet">
+                        <span class="tweet-btn-icon">𝕏</span>
+                        Post to X
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Entry -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
