@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
         search: '',
         categories: ['Feature', 'Issue', 'Changed', 'Deprecation', 'General']
     };
+    let isInitialLoad = true;
+    let defaultTweetText = '';
 
     // DOM Elements
     const appContainer = document.querySelector('.app-container');
@@ -84,6 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 allUpdates = data.updates;
                 updateCategoryCounts();
                 applyFiltersAndRender();
+                if (!isInitialLoad) {
+                    showToast('Release notes synchronized successfully!', 'success');
+                }
+                isInitialLoad = false;
             } else {
                 throw new Error(data.error || 'Failed to fetch release notes.');
             }
@@ -91,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error fetching release notes:', error);
             showError(`Could not fetch updates: ${error.message}. Please try again later.`);
             renderEmptyState('Failed to load feed data.', '⚠️');
+            showToast('Failed to synchronize feed updates.', 'warning');
         } finally {
             setLoadingState(false);
         }
@@ -283,6 +290,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     copyBtn.classList.add('copied');
                     copyBtn.disabled = true;
                     
+                    showToast('Release note copied to clipboard!', 'success');
+                    
                     setTimeout(() => {
                         copyBtn.innerHTML = originalText;
                         copyBtn.classList.remove('copied');
@@ -291,6 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } catch (err) {
                     console.error('Failed to copy text: ', err);
                     showError('Failed to copy text to clipboard.');
+                    showToast('Failed to copy text to clipboard.', 'warning');
                 }
             });
 
@@ -333,6 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const draftText = `${header}"${truncatedText}"\n#GoogleCloud #BigQuery`;
         
         tweetTextarea.value = draftText;
+        defaultTweetText = draftText; // Track default value to warn of changes on close
         updateCharCount();
         
         // Show Modal
@@ -342,6 +353,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function closeTweetModal() {
+        if (tweetTextarea.value !== defaultTweetText) {
+            const confirmClose = confirm('You have modified the tweet text. Discard changes?');
+            if (!confirmClose) return;
+        }
         tweetModal.classList.add('hidden');
         document.body.style.overflow = ''; // Re-enable body scroll
     }
@@ -365,6 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
         window.open(twitterUrl, '_blank', 'width=550,height=420');
+        defaultTweetText = tweetTextarea.value; // Prevent confirm block on successful post
         closeTweetModal();
     }
 
@@ -507,9 +523,11 @@ document.addEventListener('DOMContentLoaded', () => {
     exportCsvBtn.addEventListener('click', () => {
         if (currentlyFilteredUpdates.length === 0) {
             showError('No updates available to export.');
+            showToast('Export failed: No updates available', 'warning');
             return;
         }
         exportToCSV(currentlyFilteredUpdates);
+        showToast(`Successfully exported ${currentlyFilteredUpdates.length} updates to CSV!`, 'success');
     });
 
     // Theme Toggle click
@@ -526,6 +544,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
+    // Toast Notification System
+    // ==========================================================================
+    function showToast(message, type = 'info') {
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+        
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        
+        let icon = '⚡';
+        if (type === 'success') icon = '✓';
+        if (type === 'warning') icon = '⚠️';
+        
+        toast.innerHTML = `
+            <span class="toast-icon">${icon}</span>
+            <span class="toast-message">${message}</span>
+        `;
+        
+        container.appendChild(toast);
+        
+        // Remove toast after animation completes (3.5s total duration)
+        setTimeout(() => {
+            toast.remove();
+        }, 3500);
+    }
+
+    // ==========================================================================
     // Initialization Run
     // ==========================================================================
     // Load saved color theme
@@ -536,6 +586,23 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         document.body.classList.remove('light-theme');
         themeIcon.textContent = '☀️';
+    }
+
+    // On load, if viewport is mobile size, start with sidebar closed by default
+    if (window.innerWidth <= 992) {
+        appContainer.classList.add('sidebar-closed');
+        sidebarToggleIcon.textContent = '▶';
+    }
+
+    // Collapse sidebar when clicking anywhere on main content on mobile screens
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+        mainContent.addEventListener('click', () => {
+            if (window.innerWidth <= 992 && !appContainer.classList.contains('sidebar-closed')) {
+                appContainer.classList.add('sidebar-closed');
+                sidebarToggleIcon.textContent = '▶';
+            }
+        });
     }
 
     loadReleaseNotes();

@@ -176,6 +176,11 @@ body.light-theme .card-body code {
     color: #0f172a;
 }
 
+body.light-theme .card-body a:hover {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
 /* ==========================================================================
    Theme Toggle Button Custom Styling (Anti-Mainstream High-Visibility)
    ========================================================================== */
@@ -388,6 +393,11 @@ body {
     align-items: center;
     justify-content: center;
     transition: var(--transition-base);
+}
+
+.filter-checkbox input:focus-visible ~ .checkbox-custom {
+    box-shadow: 0 0 0 2px var(--bg-app), 0 0 0 4px var(--primary-hover);
+    border-color: var(--primary-hover);
 }
 
 .filter-checkbox input:checked ~ .checkbox-custom {
@@ -1323,22 +1333,43 @@ body.light-theme .skeleton-line {
    ========================================================================== */
 @media (max-width: 992px) {
     .app-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
     }
     
     .sidebar {
-        height: auto;
-        position: relative;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-        width: 100% !important;
-        transform: none !important;
-        opacity: 1 !important;
-        padding: 24px !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 1000;
+        width: 280px !important;
+        background-color: var(--bg-sidebar);
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+        transform: translateX(0);
+        opacity: 1;
+        border-right: 1px solid var(--border-color);
+        border-bottom: none;
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                    opacity 0.35s ease,
+                    padding 0.35s ease;
+    }
+    
+    body.light-theme .sidebar {
+        box-shadow: 0 0 25px rgba(15, 23, 42, 0.12);
+    }
+    
+    .app-container.sidebar-closed .sidebar {
+        transform: translateX(-280px);
+        opacity: 0;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        border-right-width: 0;
+        pointer-events: none;
     }
     
     .main-content {
         padding: 24px;
+        width: 100%;
     }
     
     h1.text-gradient {
@@ -1573,6 +1604,73 @@ body::after {
 @keyframes textPulse {
     0%, 100% { opacity: 0.4; }
     50% { opacity: 1; }
+}
+
+/* ==========================================================================
+   Toast Notification Styling
+   ========================================================================== */
+.toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 2000;
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--primary-hover);
+    color: var(--text-primary);
+    padding: 14px 20px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    font-size: 14px;
+    font-weight: 500;
+    pointer-events: auto;
+    animation: toastIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), toastOut 0.3s ease forwards;
+    animation-delay: 0s, 3.2s;
+    min-width: 280px;
+}
+
+body.light-theme .toast {
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.toast-success {
+    border-left-color: var(--color-feature);
+}
+
+.toast-info {
+    border-left-color: var(--color-changed);
+}
+
+.toast-warning {
+    border-left-color: var(--color-issue);
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes toastOut {
+    to {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
 }
 
 
